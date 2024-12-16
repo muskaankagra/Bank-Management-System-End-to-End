@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Bank Management System</h1>
+    </header>
+
+    <div class="container">
+        <h2 class="text-center">Welcome, {{ user['name'] }}!</h2>
+        <p class="text-center">Account Number: <strong>{{ user['account_no'] }}</strong></p>
+        <p class="text-center">Email: <strong>{{ user['email_address'] }}</strong></p>
+        <p class="text-center">Contact: <strong>{{ user['contact_details'] }}</strong></p>
+
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <!-- Dashboard actions -->
+        <div class="text-center">
+            <form action="{{ url_for('update_balance', account_no=user['account_no']) }}" method="POST" style="display:inline;">
+                <button type="submit">Update Balance</button>
+            </form>
+            <form action="{{ url_for('debit', account_no=user['account_no']) }}" method="POST" style="display:inline;">
+                <button type="submit">Debit Amount</button>
+            </form>
+            <form action="{{ url_for('credit', account_no=user['account_no']) }}" method="POST" style="display:inline;">
+                <button type="submit">Credit Amount</button>
+            </form>
+        </div>
+
+        <p class="text-center">
+            <a href="{{ url_for('index') }}">Log Out</a>
+        </p>
+    </div>
+</body>
+</html>
